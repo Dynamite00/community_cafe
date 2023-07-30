@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">    <!--// 받아온 데이터들을 출력하기 위해 쓰임, html 태그 안에 thymeleaf 문법을 사용해서 적용-->
+<head>
+    <meta charset="UTF-8">
+    <title>Uhm's 카페</title>
+</head>
+
+
+
+
+<style>
+
+  .layout {
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 40px;
+    word-spacing:2px;
+    line-height : 40px;
+    text-align:center;
+  }
+
+  .layout strong{
+    text-decoration: underline;
+    text-align:center;
+  }
+
+
+
+  .wrap {
+
+  }
+
+  .title p {
+  font-size: 35px;
+  font-weight: bold;
+
+  }
+
+
+
+
+
+</style>
+
+<body style="background: url(../img/clouds-1282314_1920.jpg)">
+
+<div class="wrap">
+
+    <div class="layout">
+
+        <div class="title">
+        <p>📍 Uhm's 카페
+        </p>
+        <table>
+
+            <thead>
+
+                   <tr style="text-align:center">
+                       <th>번호</th>
+                       <th>제목</th>
+                   </tr>
+
+            </thead>
+
+            <tbody>
+
+                   <tr th:each="board : ${list}">   <!--// BoardController 에서 List로 담아서 보낸 것, each = 반복문, list에서 board가 없어질 때까지 반복 실행-->
+                       <td th:text="${board.id}">1</td>         <!--localhost:8090/board/view?id=board.id  게시물의 고유 id 값을 담아줌-->
+                       <td style="text-align:center">
+                           <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}" style="text-decoration-line: none"> </a>     <!--a 태그에 링크를 걸어줌-->
+                       </td>
+                   </tr>
+
+            </tbody>
+
+        </table>
+        <p></p>
+
+        <a href="/board/list" class="bt first" style="text-decoration-line: none"><<</a>
+        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${page != nowPage}" th:href="@{/board/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}" style="text-decoration-line: none"></a>     <!--a search에서 가져온 값을 param에 넣어서 넘겨줌, 페이지가 넘어갈 때 searchKeyword 파라미터가 url에 존재할 경우 값을 가지고 페이지가 넘어감 -->
+
+            <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
+        </th:block>
+
+
+        <form th:action="@{/board/list}" method="get">
+            <input type="text" name="searchKeyword" placeholder="검색어" size="30px">
+            <button type="submit">🔍검색</button>
+        </form>
+
+        <p></p>
+
+        <button>
+            <a href="write" style="text-decoration-line: none">🖋 글쓰기</a>
+        </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
